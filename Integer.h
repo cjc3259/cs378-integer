@@ -64,10 +64,16 @@ OI shift_left_digits (II b, II e, int n, OI x) {
 template <typename II, typename OI>
 OI shift_right_digits (II b, II e, int n, OI x) {
     // <your code>
-    while (b != (e - n)) {
-        *x = *b;
+    if (n >= (e - b)) {
+        *x = 0;
         x++;
-        b++;
+    }
+    else {
+        while (b != (e - n)) {
+            *x = *b;
+            x++;
+            b++;
+        }
     }
     return x;}
 
@@ -195,6 +201,62 @@ OI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
 template <typename II1, typename II2, typename OI>
 OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     // <your code>
+    int s2 = distance(b2, e2);
+    int count = 0;
+    bool borrow = false;
+    for (int i = 0; i < s2; i++){
+        e1--;
+        e2--;
+        int minuend = *e1;
+        if (borrow) {
+            if (*e1 == 0) {
+                minuend = 9;
+            }
+            else {
+                minuend = *e1 - 1;
+                borrow = false;
+            }
+        }
+        if (minuend < *e2) {
+            minuend = *e1 + 10;
+            borrow = true;
+        }
+        *x = minuend - *e2;
+        x++;
+        count++;
+    }
+    while (b1 != e1) {
+
+        int minuend = *(e1 - 1);
+        if (borrow) {
+            if (minuend == 0) {
+                minuend = 9;
+            }
+            else {
+                minuend = minuend - 1;
+                borrow = false;
+            }
+        }
+        *x = minuend;
+        e1--;
+        x++;
+        count++;
+    }
+    vector<int> y(x - count, x);
+    for(int i = y.size() - 1; i > 0; --i) {
+        if (y[i] == 0) {
+            y.pop_back();
+            // rev_count--;
+        }
+        else break;
+    }
+
+    reverse(y.begin(), y.end());
+    x = x - count;
+    for(int i = 0; i < y.size(); i++){
+        *x = y[i];
+        x++;
+    }
     return x;}
 
 // -----------------
