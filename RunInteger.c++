@@ -6,7 +6,7 @@
 
 /*
 To run the program:
-    % g++ -pedantic -std=c++0x -Wall Integer.c++ RunInteger.c++ -o RunInteger
+    % g++ -pedantic -std=c++0x -Wall Integer.h RunInteger.c++ -o RunInteger
     % valgrind RunInteger > RunInteger.out
 
 To configure Doxygen:

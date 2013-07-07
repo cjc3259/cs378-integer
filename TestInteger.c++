@@ -12,7 +12,7 @@ To test the program:
     ...
     % locate libcppunit.a
     /usr/lib/libcppunit.a
-    % g++ -pedantic -std=c++0x -Wall Integer.c++ TestInteger.c++ -o TestInteger -lcppunit -ldl
+    % g++ -pedantic -std=c++0x -Wall Integer.h TestInteger.c++ -o TestInteger -lcppunit -ldl
     % valgrind TestInteger > TestInteger.out
 */
 
@@ -25,6 +25,7 @@ To test the program:
 #include <sstream>   // ostringstream
 #include <stdexcept> // invalid_argument
 #include <string>    // ==
+#include <iostream>
 
 #include "cppunit/extensions/HelperMacros.h" // CPPUNIT_TEST, CPPUNIT_TEST_SUITE, CPPUNIT_TEST_SUITE_END
 #include "cppunit/TestFixture.h"             // TestFixture
@@ -32,6 +33,7 @@ To test the program:
 
 #include "Integer.h"
 
+using namespace std;
 // -----------
 // TestInteger
 // -----------
@@ -58,6 +60,7 @@ struct TestInteger : CppUnit::TestFixture {
         const int b[] = {2};
               int x[10];
         const int* p = shift_right_digits(a, a + 3, 2, x);
+        // std::cout << p - x;
         CPPUNIT_ASSERT((p - x) == 1);
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, b));}
 
@@ -72,6 +75,50 @@ struct TestInteger : CppUnit::TestFixture {
               int x[10];
         const int* p = plus_digits(a, a + 3, b, b + 3, x);
         CPPUNIT_ASSERT(p - x == 3);
+        // cout << x[0] << x[1] << x[2] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_plus_digits_2 () {
+        const int a[] = {2, 3, 4};
+        const int b[] = {6, 7};
+        const int c[] = {3, 0, 1};
+              int x[10];
+        const int* p = plus_digits(a, a + 3, b, b + 2, x);
+        CPPUNIT_ASSERT(p - x == 3);
+        // cout << x[0] << x[1] << x[2] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_plus_digits_3 () {
+        const int a[] = {6, 7};
+        const int b[] = {2, 3, 4};
+        const int c[] = {3, 0, 1};
+              int x[10];
+        const int* p = plus_digits(a, a + 2, b, b + 3, x);
+        // cout << p - x << endl;
+        CPPUNIT_ASSERT(p - x == 3);
+        // cout << x[0] << x[1] << x[2] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_plus_digits_4 () {
+        const int a[] = {1};
+        const int b[] = {9, 9, 9};
+        const int c[] = {1, 0, 0, 0};
+              int x[10];
+        const int* p = plus_digits(a, a + 1, b, b + 3, x);
+        // cout << p - x << endl;
+        CPPUNIT_ASSERT(p - x == 4);
+        // cout << x[0] << x[1] << x[2] << x[3] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_plus_digits_5 () {
+        const int a[] = {9, 9, 9};
+        const int b[] = {9, 9, 9};
+        const int c[] = {1, 9, 9, 8};
+              int x[10];
+        const int* p = plus_digits(a, a + 3, b, b + 3, x);
+        // cout << p - x << endl;
+        CPPUNIT_ASSERT(p - x == 4);
+        // cout << x[0] << x[1] << x[2] << x[3] << endl;
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
 
     // ------------
@@ -234,18 +281,22 @@ struct TestInteger : CppUnit::TestFixture {
     CPPUNIT_TEST(test_shift_left_digits);
     CPPUNIT_TEST(test_shift_right_digits);
     CPPUNIT_TEST(test_plus_digits);
-    CPPUNIT_TEST(test_minus_digits);
-    CPPUNIT_TEST(test_multiplies_digits);
-    CPPUNIT_TEST(test_divides_digits);
-    CPPUNIT_TEST(test_constructor_1);
-    CPPUNIT_TEST(test_constructor_2);
-    CPPUNIT_TEST(test_constructor_3);
-    CPPUNIT_TEST(test_abs_1);
-    CPPUNIT_TEST(test_abs_2);
-    CPPUNIT_TEST(test_negation);
-    CPPUNIT_TEST(test_output);
-    CPPUNIT_TEST(test_pow_1);
-    CPPUNIT_TEST(test_pow_2);
+    CPPUNIT_TEST(test_plus_digits_2);
+    CPPUNIT_TEST(test_plus_digits_3);
+    CPPUNIT_TEST(test_plus_digits_4);
+    CPPUNIT_TEST(test_plus_digits_5);
+    // CPPUNIT_TEST(test_minus_digits);
+    // CPPUNIT_TEST(test_multiplies_digits);
+    // CPPUNIT_TEST(test_divides_digits);
+    // CPPUNIT_TEST(test_constructor_1);
+    // CPPUNIT_TEST(test_constructor_2);
+    // CPPUNIT_TEST(test_constructor_3);
+    // CPPUNIT_TEST(test_abs_1);
+    // CPPUNIT_TEST(test_abs_2);
+    // CPPUNIT_TEST(test_negation);
+    // CPPUNIT_TEST(test_output);
+    // CPPUNIT_TEST(test_pow_1);
+    // CPPUNIT_TEST(test_pow_2);
     CPPUNIT_TEST_SUITE_END();};
 
 // ----

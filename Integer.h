@@ -11,11 +11,15 @@
 // includes
 // --------
 
+#include <algorithm> // reverse
 #include <cassert>   // assert
 #include <iostream>  // ostream
+#include <iterator>  // not sure if we need this or not..
 #include <stdexcept> // invalid_argument
 #include <string>    // string
 #include <vector>    // vector
+
+using namespace std;
 
 // -----------------
 // shift_left_digits
@@ -33,6 +37,15 @@
 template <typename II, typename OI>
 OI shift_left_digits (II b, II e, int n, OI x) {
     // <your code>
+    while(b != e) {
+        *x = *b;
+        x++;
+        b++;
+    }
+    for(int i = 0; i < n; i++) {
+        *x = 0;
+        x++;
+    }
     return x;}
 
 // ------------------
@@ -51,6 +64,11 @@ OI shift_left_digits (II b, II e, int n, OI x) {
 template <typename II, typename OI>
 OI shift_right_digits (II b, II e, int n, OI x) {
     // <your code>
+    while (b != (e - n)) {
+        *x = *b;
+        x++;
+        b++;
+    }
     return x;}
 
 // -----------
@@ -71,6 +89,92 @@ OI shift_right_digits (II b, II e, int n, OI x) {
 template <typename II1, typename II2, typename OI>
 OI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     // <your code>
+    int sum = 0;
+    int carry = 0;
+    int count = 0;
+    int s1 = distance(b1, e1);
+    // cout << s1 << endl;
+    int s2 = distance(b2, e2);
+    // cout << s2 << endl;
+
+    if (s1 >= s2) {
+        for (int i = 0; i < s2; i++) {
+            e1--;
+            e2--;
+            sum = carry + *e1 + *e2;
+            // cout << carry << *e1 << *e2 << endl;
+            // cout << "sum = " << sum << endl;
+            if (sum > 9) {            
+                sum = sum % 10;
+                carry = 1;
+            } 
+            else carry = 0;
+            *x = sum;
+            sum = 0;
+            count++;
+            x++;
+            
+        }
+        while (b1 != e1) {
+            sum = carry + *(e1 - 1);
+            if (sum > 9) {
+                sum = sum % 10;
+                carry = 1;
+            } 
+            else carry = 0;
+            *x = sum;
+            sum = 0;
+            e1--;
+            count++;
+            x++;
+        }
+    }
+    else {
+        for (int i = 0; i < s1; i++) {
+            e1--;
+            e2--;
+            sum = carry + *e1 + *e2;
+            // cout << carry << *e1 << *e2 << endl;
+            if (sum > 9) {
+                sum = sum%10;
+                carry = 1;
+            } 
+            else carry = 0;
+            *x = sum;
+            sum = 0;
+            count++;
+            x++;
+            
+        }
+        while (b2 != e2) {
+            sum = carry + *(e2 - 1);
+            if (sum > 9) {
+                sum = sum%10;
+                carry = 1;
+            } 
+            else carry = 0;
+            *x = sum;
+            sum = 0;
+            e2--;
+            count++;
+            x++;
+        }
+    }
+
+    if (carry == 1) {
+        *x = 1;
+        count++;
+        x++;
+    }
+    vector<int> y(x - count, x);
+    reverse(y.begin(), y.end());
+    x = x - count;
+    for(int i = 0; i < y.size(); i++){
+        *x = y[i];
+        // cout << y[i];
+        x++;
+    }
+    // cout << endl;
     return x;}
 
 // ------------
