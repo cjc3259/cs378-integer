@@ -99,17 +99,14 @@ OI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     int carry = 0;
     int count = 0;
     int s1 = distance(b1, e1);
-    // cout << s1 << endl;
     int s2 = distance(b2, e2);
-    // cout << s2 << endl;
 
+    // if first number is bigger or equal to second number
     if (s1 >= s2) {
         for (int i = 0; i < s2; i++) {
             e1--;
             e2--;
             sum = carry + *e1 + *e2;
-            // cout << carry << *e1 << *e2 << endl;
-            // cout << "sum = " << sum << endl;
             if (sum > 9) {            
                 sum = sum % 10;
                 carry = 1;
@@ -135,12 +132,13 @@ OI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
             x++;
         }
     }
+
+    // if second number is bigger than first number
     else {
         for (int i = 0; i < s1; i++) {
             e1--;
             e2--;
             sum = carry + *e1 + *e2;
-            // cout << carry << *e1 << *e2 << endl;
             if (sum > 9) {
                 sum = sum%10;
                 carry = 1;
@@ -167,20 +165,21 @@ OI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
         }
     }
 
+    // if there is still a carry after adding all 'columns', add the 1
     if (carry == 1) {
         *x = 1;
         count++;
         x++;
     }
+
+    // reverse the order of the numbers for output
     vector<int> y(x - count, x);
     reverse(y.begin(), y.end());
     x = x - count;
     for(int i = 0; i < y.size(); i++){
         *x = y[i];
-        // cout << y[i];
         x++;
     }
-    // cout << endl;
     return x;}
 
 // ------------
@@ -204,6 +203,8 @@ OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     int s2 = distance(b2, e2);
     int count = 0;
     bool borrow = false;
+
+    // perform minus for all columns in smallest number 
     for (int i = 0; i < s2; i++){
         e1--;
         e2--;
@@ -225,6 +226,8 @@ OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
         x++;
         count++;
     }
+
+    // continue subtracting for the rest of the minuend
     while (b1 != e1) {
 
         int minuend = *(e1 - 1);
@@ -242,15 +245,17 @@ OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
         x++;
         count++;
     }
+
+    // clearing leading zeros (e.g.--0001 = 1).
     vector<int> y(x - count, x);
     for(int i = y.size() - 1; i > 0; --i) {
         if (y[i] == 0) {
             y.pop_back();
-            // rev_count--;
         }
         else break;
     }
 
+    // reverse order and output
     reverse(y.begin(), y.end());
     x = x - count;
     for(int i = 0; i < y.size(); i++){
@@ -283,106 +288,66 @@ OI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     vector<int> m2;
     vector<vector<int> > w;
 
+    // if either number is 0, output 0
     if((*b1 == 0 && (e1 - b1) == 1) || (*b2 == 0 && (e2 - b2) == 1)) {
         *x = 0;
         return x + 1;
     }
     
+    // order the two numbers, 'biggest' first
     if (s1 >= s2) {
         for(int i = 0; i < s1; ++i) {
             m1.push_back(*b1 + i);
-            cout << m1[m1.size() - 1];
         }
-        cout << endl;
         for(int i = 0; i < s2; ++i) {
             m2.push_back(*b2 + i);
-            cout << m2[m2.size() - 1];
         }
-        cout << endl;
     }
     else {
         for(int i = 0; i < s1; ++i) {
             m2.push_back(*b1 + i);
-            cout << m2[m2.size() - 1];
         }
-        cout << endl;
         for(int i = 0; i < s2; ++i) {
             m1.push_back(*b2 + i);
-            cout << m1[m1.size() - 1];
         }
-        cout << endl;
     }
 
+    // perform multiplication on digits to get matrix of numbers to eventually add up for the product
     for(int i = 0; i < m2.size(); ++i) {
         int carry = 0;
         vector<int> d;
         w.push_back(d);
-        // cout << "carry" << endl;
         for(int j = 0; j < i; ++j) {
-            cout << "column shift" << endl;
             w[i].push_back(0);
-            cout << w[i][j] << endl;
         }
         for(int k = 0; k < m1.size(); ++k) {
             int p = m2[m2.size() - 1 - i]*m1[m1.size() - 1 - k] + carry;
-            // cout << m1[m1.size() - 1 - k] << "*" << m2[m2.size() - 1 - i] << endl;
-            // cout << "p = " << p << endl;
             if(p > 9) {
                 carry = p/10;
                 p = p%10;
             }
-            // cout << carry << endl;
-            // cout << p << endl;
             w[i].push_back(p);
-            cout << w[i][k + i] << endl;        
         }
         if (carry != 0) {
             w[i] .push_back(carry);
-            cout << w[i].back() << endl;
-            cout << "last carry" << endl;
         }
     }
 
-
+    // add up multiple vectors of numbers to get the final product
     vector<int> product;
     product.push_back(0);
     *x = 0;
-    // int* product = x;
     int* product_end = x + 1;
     for (int i = 0; i < w.size(); ++i) {
         reverse(w[i].begin(), w[i].end());
 
-        cout << "element = ";
-        for (int j = 0; j < w[i].size(); ++j) {
-            cout << w[i][j];
-        }
-        cout << endl;
-
-        cout << "pre-product = ";
-        for (int k = 0; k < (product.end() - product.begin()); ++k) {
-            cout << *(product.begin() + k); 
-        }
-        cout << endl;
-
         product_end = plus_digits(product.begin(), product.end(), w[i].begin(), w[i].end(), x);
-        // product_end = plus_digits(w[i].begin(), w[i].end(), w[i+1].begin(), w[i+1].end(), product);
-        cout << "post-product = ";
+
         product.clear();
         for (int k = 0; k < (product_end - x); ++k) {
-            cout << *(x + k); 
             product.push_back(*(x + k));
         }
-        cout << endl << endl;
     }
-
-    // int* product = x;
-    // product_end = plus_digits(w[0].begin(), w[0].end(), w[1].begin(), w[1].end(), x);
-    // cout << "w[0] size = " << (w[0].end() - w[0].begin()) << endl;
-    // cout << "*w[0] = " << *w[0].begin() << *(w[0].begin() + 1) << *(w[0].begin() + 2) << *(w[0].begin() + 3) << endl;
-    // cout << "w[1] size = " << (w[1].end() - w[1].begin()) << endl;
-    // cout << "*w[1] = " << *w[1].begin() << *(w[1].begin() + 1) << *(w[1].begin() + 2) << *(w[1].begin() + 3) << *(w[1].begin() + 4) << endl;
-    // cout << "product size = " <<(product_end - x) << endl;
-    // cout << "*product = " << *x << *(x + 1) << *(x + 2) << *(x + 3) << *(x + 4) << endl;
     return product_end;}
 
 // -------------- 
