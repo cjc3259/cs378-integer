@@ -371,6 +371,23 @@ OI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
 template <typename II1, typename II2, typename OI>
 OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     // <your code>
+
+    int sub_counter = 0;		// Counts the number of time sub can be called (quotient)
+	int divSize = distance(b2, e2)	// Size of the divisor array
+    int subValue[distance(b2, e2)];
+
+	// Calls minus_digits in increments the size of the divisor
+    while (b1 != e1){
+        // Need to call minus_digits here to initialize subValue
+		while (*subValue > 0){
+			minus_digits(b1, b1 + divSize, b2, e2, subValue) 
+			++sub_counter;
+		}
+		++digit_counter;
+		*x = sub_counter;		// Places first value of quotient in x
+		++x;
+    }
+	
     return x;}
 
 // -------
@@ -562,9 +579,8 @@ class Integer {
         // ----
 
         // <your data>
-        template <typename T>
-        vector<T> v;
-        deque<int> d;
+        vector<typename C::value_type> v;
+        deque<typename C::value_type> d;
 
     private:
         // -----
@@ -573,12 +589,16 @@ class Integer {
 
         bool valid () const {
             // <your code>
-            // int a;
-            // cout << typeid(*this).name()
-            cout << typeid(*this).name() << endl;
+/*
             if(typeid(*this).name() == "vector<int>" || typeid(*this).name() == "deque<int>")
                 return true;
-            else return false;
+            else return false;*/
+            typename C::value_type type;
+            cout << "Type Name: " << type << endl;
+            if (type < 0){
+		cout << "Returning False!" << endl;
+                return false;}
+            return true;
         }
 
     public:
@@ -606,8 +626,8 @@ class Integer {
                 cout << v[i];
             }
             cout << endl;
-            cout << "INT" << endl;
-            cout << typeid(v).name() << endl;
+            typename C::value_type s;
+            cout << s << endl;
             assert(valid());}
 
         /**
@@ -633,7 +653,9 @@ class Integer {
                 cout << v[i];
             }
             cout << endl;
-            cout << typeid(v).name() << endl;
+            //cout << typeid(v).name() << endl;
+            typename C::value_type s;
+            cout << s << endl;
             if (!valid())
                 throw std::invalid_argument("Integer::Integer()");}
 
