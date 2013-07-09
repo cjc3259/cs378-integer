@@ -384,13 +384,12 @@ class Integer {
     // -----------
 
     /**
-     * <your documentation>
+     *  Check for equivalence between the lhs and rhs
      */
     friend bool operator == (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        // if()
         return false;
-
+        return (lhs == rhs);
 
     }
 
@@ -409,11 +408,12 @@ class Integer {
     // ----------
 
     /**
-     * <your documentation>
+     *  Operator < is a comparison between the two values
      */
     friend bool operator < (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        return false;}
+        //return false;}
+        return (lhs < rhs);}
 
     // -----------
     // operator <=
