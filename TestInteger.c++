@@ -297,6 +297,12 @@ struct TestInteger : CppUnit::TestFixture {
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
+    void test_constructor_4 () {
+        try {
+            const Integer<int> x(-442);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}}
+
     // ---
     // abs
     // ---
@@ -413,9 +419,10 @@ struct TestInteger : CppUnit::TestFixture {
     CPPUNIT_TEST(test_multiplies_digits_4);
     CPPUNIT_TEST(test_multiplies_digits_5);
     // CPPUNIT_TEST(test_divides_digits);
-    // CPPUNIT_TEST(test_constructor_1);
-    // CPPUNIT_TEST(test_constructor_2);
-    // CPPUNIT_TEST(test_constructor_3);
+    CPPUNIT_TEST(test_constructor_1);
+    CPPUNIT_TEST(test_constructor_2);
+    CPPUNIT_TEST(test_constructor_3);
+    CPPUNIT_TEST(test_constructor_4);
     // CPPUNIT_TEST(test_abs_1);
     // CPPUNIT_TEST(test_abs_2);
     // CPPUNIT_TEST(test_negation);

@@ -16,8 +16,11 @@
 #include <iostream>  // ostream
 #include <iterator>  // not sure if we need this or not..
 #include <stdexcept> // invalid_argument
+#include <stdlib.h>  // atoi, abs
 #include <string>    // string
 #include <vector>    // vector
+#include <deque>     // deque
+#include <typeinfo>  // check data type
 
 using namespace std;
 
@@ -385,7 +388,11 @@ class Integer {
      */
     friend bool operator == (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        return false;}
+        // if()
+        return false;
+
+
+    }
 
     // -----------
     // operator !=
@@ -555,6 +562,9 @@ class Integer {
         // ----
 
         // <your data>
+        template <typename T>
+        vector<T> v;
+        deque<int> d;
 
     private:
         // -----
@@ -563,7 +573,13 @@ class Integer {
 
         bool valid () const {
             // <your code>
-            return true;}
+            // int a;
+            // cout << typeid(*this).name()
+            cout << typeid(*this).name() << endl;
+            if(typeid(*this).name() == "vector<int>" || typeid(*this).name() == "deque<int>")
+                return true;
+            else return false;
+        }
 
     public:
         // ------------
@@ -575,6 +591,23 @@ class Integer {
          */
         Integer (int value) {
             // <your code>
+            while(value != 0) {
+                int d = value%10;
+                if(!(value < 10 && value > -10)){
+                    if(d < 0)
+                        v.push_back(-d);
+                    else v.push_back(d);
+                } 
+                else v.push_back(d);
+                value/=10;
+            }
+            reverse(v.begin(), v.end());
+            for (int i = 0; i < v.size(); ++i) {
+                cout << v[i];
+            }
+            cout << endl;
+            cout << "INT" << endl;
+            cout << typeid(v).name() << endl;
             assert(valid());}
 
         /**
@@ -583,6 +616,24 @@ class Integer {
          */
         explicit Integer (const std::string& value) {
             // <your code>
+            int i = atoi(value.c_str());
+            cout << i << endl;
+            while(i != 0) {
+                int d = i%10;
+                if(!(i < 10 && i > -10)){
+                    if(d < 0)
+                        v.push_back(-d);
+                    else v.push_back(d);
+                } 
+                else v.push_back(d);
+                i/=10;
+            }
+            reverse(v.begin(), v.end());
+            for (int i = 0; i < v.size(); ++i) {
+                cout << v[i];
+            }
+            cout << endl;
+            cout << typeid(v).name() << endl;
             if (!valid())
                 throw std::invalid_argument("Integer::Integer()");}
 
@@ -744,5 +795,9 @@ class Integer {
         Integer& pow (int e) {
             // <your code>
             return *this;}};
+
+        // long size() {
+        //     return *this.size();
+        // }
 
 #endif // Integer_h
