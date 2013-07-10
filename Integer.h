@@ -476,7 +476,7 @@ OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
 // -------
 
 template < typename T, typename C = std::vector<T> >
-class Integer {
+class Integer : public vector<int> {
     // -----------
     // operator ==
     // -----------
@@ -486,7 +486,8 @@ class Integer {
      */
     friend bool operator == (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        return (lhs.v == rhs.v);
+
+        return lhs.v == rhs.v;
     }
 
     // -----------
@@ -494,7 +495,7 @@ class Integer {
     // -----------
 
     /**
-     *  Operator checks for the negation of equivalence
+     * <your documentation>
      */
     friend bool operator != (const Integer& lhs, const Integer& rhs) {
         return !(lhs == rhs);}
@@ -508,7 +509,7 @@ class Integer {
      */
     friend bool operator < (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        return (lhs.v < rhs.v;}
+        return lhs.v < rhs.v;}
 
     // -----------
     // operator <=
@@ -783,9 +784,9 @@ class Integer {
         //     return v.empty();
         // }
 
-        // bool size() {
-        //     return v.size();
-        // }
+        long size() {
+            return v.size();
+        }
 
         // int front() {
         //     return v.front();
@@ -793,6 +794,10 @@ class Integer {
 
         // int back() {
         //     return v.back();
+        // }
+
+        // const int* begin() {
+        //     return v.begin();
         // }
 
         // ----------
@@ -814,7 +819,8 @@ class Integer {
         // operator ++
         // -----------
 
-        /**
+        /**                *this
+
          * <your documentation>
          */
         Integer& operator ++ () {
@@ -857,8 +863,35 @@ class Integer {
          */
         Integer& operator += (const Integer& rhs) {
             // <your code>
-            *this = *this + rhs;
-            return *this;}
+            Integer<int> z = *this;
+            
+
+            cout << "+" << endl;
+            Integer<int> x = *this;
+            Integer<int> y = rhs;
+            cout << "size " << z.size() << endl;
+            cout << "size " << y.size() << endl;
+
+            int* end = &z[0] + 1;
+            z.push_back(0);
+            z.clear();
+            cout << "+" << endl;
+            // int s1 = distance(&rhs[0], &rhs[0] + rhs.size());
+            // int s2 = distance(x.begin(), x.end());
+            // cout << s1 << endl;
+            // cout << s2 << endl;
+            // cout << rhs[0] << endl;
+            int u[10];
+            cout << z[0] << endl;
+            end = multiplies_digits(x.begin(), x.begin() + x.size(), y.begin(), y.begin() + y.size(), u);
+            assert(false); 
+            // fill(z.begin(), z.begin() + 1, y.begin());
+            cout << "+" << endl;
+            for (int i =0; i < (end - &z[0]); ++i) {
+                z.push_back(z[i]);
+            }
+            
+            return z;}
 
         // -----------
         // operator -=
@@ -881,7 +914,9 @@ class Integer {
          */
         Integer& operator *= (const Integer& rhs) {
             // <your code>
-            *this = *this * rhs;
+            // cout << "*=";
+            // Integer x = *this;
+            // int* end = multiplies_digits(rhs.begin(), rhs.end(), this.begin(), this.end(), &x); 
             return *this;}
 
         // -----------
@@ -955,10 +990,14 @@ class Integer {
         Integer& pow (int e) {
             // <your code>
             Integer x = *this;
+            Integer y = *this;
+            cout << "assign x" << endl;
             for(int i = 0; i < e; ++i){
-                *this *= x;
+                cout << "increment";
+                y = x * y;
             }
-            return *this;}};
+            cout << endl;
+            return y;}};
 
         // long size() {
         //     return *this.size();

@@ -457,6 +457,7 @@ struct TestInteger : CppUnit::TestFixture {
 
     void test_pow_1 () {
         try {
+            cout << "test_pow" << endl;
             Integer<int>       x = 98765;
             const int          e =  9867;
             Integer<int>&      y = x.pow(e);
@@ -477,6 +478,17 @@ struct TestInteger : CppUnit::TestFixture {
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
+    void test_Integer_plus() {
+        try {
+            const Integer<int> x = 100000;
+            const Integer<int> y = 1;
+            const Integer<int> z = x + y;
+            CPPUNIT_ASSERT(x == 1);
+            CPPUNIT_ASSERT(y == 1);
+            CPPUNIT_ASSERT(z == 2);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
     // -----
     // suite
     // -----
@@ -524,10 +536,13 @@ struct TestInteger : CppUnit::TestFixture {
 
     // CPPUNIT_TEST(test_abs_1);
     // CPPUNIT_TEST(test_abs_2);
+    CPPUNIT_TEST(test_equal_to);
     // CPPUNIT_TEST(test_negation);
     // CPPUNIT_TEST(test_output);
     // CPPUNIT_TEST(test_pow_1);
     // CPPUNIT_TEST(test_pow_2);
+
+    CPPUNIT_TEST(test_Integer_plus);
     CPPUNIT_TEST_SUITE_END();};
 
 // ----
