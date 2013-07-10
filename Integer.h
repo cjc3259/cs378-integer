@@ -17,10 +17,13 @@
 #include <iterator>  // not sure if we need this or not..
 #include <stdexcept> // invalid_argument
 #include <stdlib.h>  // atoi, abs
+#include <stdio.h>   // isdigit
 #include <string>    // string
 #include <vector>    // vector
 #include <deque>     // deque
 #include <typeinfo>  // check data type
+#include <ctype.h>   // isdigit
+#include <cstddef>   // find_first_of
 
 using namespace std;
 
@@ -218,11 +221,13 @@ OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
             }
             else {
                 minuend = *e1 - 1;
+                // cout << minuend << endl;
                 borrow = false;
             }
         }
         if (minuend < *e2) {
-            minuend = *e1 + 10;
+            minuend = minuend + 10;
+            // cout << minuend << endl;
             borrow = true;
         }
         *x = minuend - *e2;
@@ -372,23 +377,99 @@ template <typename II1, typename II2, typename OI>
 OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     // <your code>
 
-    int sub_counter = 0;		// Counts the number of time sub can be called (quotient)
-	int divSize = distance(b2, e2)	// Size of the divisor array
-    int subValue[distance(b2, e2)];
+ //    int sub_counter = 0;		// Counts the number of time sub can be called (quotient)
+	// int divSize = distance(b2, e2);	// Size of the divisor array
+ //    int subValue[distance(b2, e2)];
 
-	// Calls minus_digits in increments the size of the divisor
-    while (b1 != e1){
-        // Need to call minus_digits here to initialize subValue
-		while (*subValue > 0){
-			minus_digits(b1, b1 + divSize, b2, e2, subValue) 
-			++sub_counter;
-		}
-		++digit_counter;
-		*x = sub_counter;		// Places first value of quotient in x
-		++x;
+	// // Calls minus_digits in increments the size of the divisor
+ //    while (b1 != e1){
+ //        // Need to call minus_digits here to initialize subValue
+	// 	while (*subValue > 0){
+	// 		minus_digits(b1, b1 + divSize, b2, e2, subValue); 
+	// 		++sub_counter;
+	// 	}
+	// 	++digit_counter;
+	// 	*x = sub_counter;		// Places first value of quotient in x
+	// 	++x;
+ //    }
+    
+	int s1 = distance(b1, e1);
+    int s2 = distance(b2, e2);
+    *x = 0;
+    // x++;
+    if(s1 < s2)
+        return x + 1;
+
+    if(s1 == 1 && *b1 == 0) 
+        return x + 1;
+
+    // cout << "test" << endl;
+    bool less_than = false;
+    vector<int> divisor;
+    int* divisor_end = &divisor[0] + 1;
+    vector<int> dummy;
+    int* dummy_end = &dummy[0] + 1;
+    dummy.push_back(0);
+
+    int* x_end = x + 1;
+
+    vector<int> increment;
+    increment.push_back(1);
+
+    vector<int> count;
+    count.push_back(0);
+
+    for(int i = 0; i < s1; ++i) {
+        divisor.push_back(*(b1 + i));
+        cout << divisor[i];
     }
-	
-    return x;}
+    cout << endl;
+
+    for(int i = 0; i < s2; ++i) {
+        cout << *(b2 + i);
+    }
+    cout << endl;
+    // cout << "test" << endl;
+    while (!less_than) {
+        dummy_end = minus_digits(divisor.begin(), divisor.end(), b2, e2, &dummy[0]);
+        // cout << "test" << endl;
+
+        // cout << dummy.size() << endl;
+        divisor.clear();
+        for (int i = 0; i < (dummy_end - &dummy[0]); ++i) {
+            divisor.push_back(dummy[i]);
+            // cout << divisor[i];
+        }
+        // cout << endl;
+
+
+
+        x_end = plus_digits(increment.begin(), increment.end(), count.begin(), count.end(), x);
+        
+        count.clear();
+        for(int i = 0; i < (x_end - x); ++i) {
+            count.push_back(*(x + i));
+            // cout << *(x + i);
+        }
+        // cout <<endl;
+        // cout << "x size = " << x_end - x << endl;
+
+        s1 = distance(divisor.begin(), divisor.end());
+        
+        if(s1 < s2)
+            less_than = true;
+        if(s1 == s2) {
+            for(int i = 0; i < s1; ++i) {
+                if(*(divisor.begin() + i) < *(b2 + i)) {
+                    less_than = true;
+                    break;
+                }
+            }
+        }
+
+    }
+    cout << "x size = " << x_end - x << endl;
+    return x_end;}
 
 // -------
 // Integer
@@ -406,8 +487,6 @@ class Integer {
     friend bool operator == (const Integer& lhs, const Integer& rhs) {
         // <your code>
         return false;
-        return (lhs == rhs);
-
     }
 
     // -----------
@@ -429,8 +508,7 @@ class Integer {
      */
     friend bool operator < (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        //return false;}
-        return (lhs < rhs);}
+        return false;}
 
     // -----------
     // operator <=
@@ -579,8 +657,7 @@ class Integer {
         // ----
 
         // <your data>
-        vector<typename C::value_type> v;
-        deque<typename C::value_type> d;
+        C v;
 
     private:
         // -----
@@ -593,11 +670,25 @@ class Integer {
             if(typeid(*this).name() == "vector<int>" || typeid(*this).name() == "deque<int>")
                 return true;
             else return false;*/
-            typename C::value_type type;
-            cout << "Type Name: " << type << endl;
-            if (type < 0){
-		cout << "Returning False!" << endl;
-                return false;}
+  //           typename C::value_type type;
+  //           cout << "Type Name: " << type << endl;
+  //           if (type < 0){
+		// cout << "Returning False!" << endl;
+  //               return false;}
+  //           return true;
+            // for (int i = 0; i < *this.size(); ++i) {
+            //     // cout << "char value = " << value[i] << endl;
+            //     // cout << "is negative " << value.find_first_of('-') << endl;
+
+            //     if(*this.find_first_of('-') == i)
+            //         continue;
+            //     if(!(isdigit(this[i]))) {
+            //         return false;   
+            //     }
+            // }
+
+            if(v.empty())
+                return false;
             return true;
         }
 
@@ -611,6 +702,8 @@ class Integer {
          */
         Integer (int value) {
             // <your code>
+            if (value == 0)
+                v.push_back(0);
             while(value != 0) {
                 int d = value%10;
                 if(!(value < 10 && value > -10)){
@@ -622,12 +715,12 @@ class Integer {
                 value/=10;
             }
             reverse(v.begin(), v.end());
-            for (int i = 0; i < v.size(); ++i) {
-                cout << v[i];
-            }
-            cout << endl;
-            typename C::value_type s;
-            cout << s << endl;
+            // for (int i = 0; i < v.size(); ++i) {
+            //     cout << v[i];
+            // }
+            // cout << endl;
+            // typename C::value_type s;
+            // cout << "s " << s << endl;
             assert(valid());}
 
         /**
@@ -636,33 +729,71 @@ class Integer {
          */
         explicit Integer (const std::string& value) {
             // <your code>
-            int i = atoi(value.c_str());
-            cout << i << endl;
-            while(i != 0) {
-                int d = i%10;
-                if(!(i < 10 && i > -10)){
-                    if(d < 0)
-                        v.push_back(-d);
+            
+
+            bool isInteger = true;
+            // cout << value << endl;
+            // cout << "True = " << isInteger << endl;
+            // string copy = value;
+            for (int i = 0; i < value.size(); ++i) {
+                // cout << "char value = " << value[i] << endl;
+                // cout << "is negative " << value.find_first_of('-') << endl;
+
+                if(value.find_first_of('-') == i)
+                    continue;
+                // cout << "isdigit" << isdigit(value[i]) << endl;
+                if(!(isdigit(value[i]))) {
+                    isInteger = false;
+                    break;   
+                }
+            }
+            // cout << "isInteger " << isInteger << endl;
+            if (isInteger) {
+                int i = atoi(value.c_str());
+                // cout << i << endl;
+                while(i != 0) {
+                    int d = i%10;
+                    if(!(i < 10 && i > -10)){
+                        if(d < 0)
+                            v.push_back(-d);
+                        else v.push_back(d);
+                    } 
                     else v.push_back(d);
-                } 
-                else v.push_back(d);
-                i/=10;
+                    i/=10;
+                }
+                reverse(v.begin(), v.end());
+                // for (int i = 0; i < v.size(); ++i) {
+                //     cout << v[i];
+                // }
+                // cout << endl;
             }
-            reverse(v.begin(), v.end());
-            for (int i = 0; i < v.size(); ++i) {
-                cout << v[i];
-            }
-            cout << endl;
             //cout << typeid(v).name() << endl;
-            typename C::value_type s;
-            cout << s << endl;
+            
+            // cout << "empty? " << v.empty() << endl;
             if (!valid())
-                throw std::invalid_argument("Integer::Integer()");}
+                throw std::invalid_argument("Integer::Integer()");
+        }
 
         // Default copy, destructor, and copy assignment.
         // Integer (const Integer&);
         // ~Integer ();
         // Integer& operator = (const Integer&);
+
+        // bool empty() {
+        //     return v.empty();
+        // }
+
+        // bool size() {
+        //     return v.size();
+        // }
+
+        // int front() {
+        //     return v.front();
+        // }
+
+        // int back() {
+        //     return v.back();
+        // }
 
         // ----------
         // operator -
@@ -673,7 +804,11 @@ class Integer {
          */
         Integer operator - () const {
             // <your code>
-            return Integer(0);}
+            // Integer x = *this;
+            // x *= 2;
+            // *this -= x;
+
+            return *this;}
 
         // -----------
         // operator ++
@@ -722,6 +857,7 @@ class Integer {
          */
         Integer& operator += (const Integer& rhs) {
             // <your code>
+            *this = *this + rhs;
             return *this;}
 
         // -----------
@@ -733,6 +869,7 @@ class Integer {
          */
         Integer& operator -= (const Integer& rhs) {
             // <your code>
+            *this = *this - rhs;
             return *this;}
 
         // -----------
@@ -744,6 +881,7 @@ class Integer {
          */
         Integer& operator *= (const Integer& rhs) {
             // <your code>
+            *this = *this * rhs;
             return *this;}
 
         // -----------
@@ -816,6 +954,10 @@ class Integer {
          */
         Integer& pow (int e) {
             // <your code>
+            Integer x = *this;
+            for(int i = 0; i < e; ++i){
+                *this *= x;
+            }
             return *this;}};
 
         // long size() {

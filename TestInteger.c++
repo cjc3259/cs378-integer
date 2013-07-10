@@ -212,6 +212,18 @@ struct TestInteger : CppUnit::TestFixture {
         // cout << x[0] << x[1] << x[2] << endl;
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
 
+    void test_minus_digits_6 () {
+        const int a[] = {1, 3, 2, 1, 1, 1};
+        const int b[] = {5, 6, 7};
+        const int c[] = {1, 3, 1, 5, 4, 4};
+              int x[10];
+        const int* p = minus_digits(a, a + 6, b, b + 3, x);
+        // cout << p - x << endl;
+        // cout << x[0] << endl;
+        CPPUNIT_ASSERT(p - x == 6);
+        cout << x[0] << x[1] << x[2] << x[3] << x[4] << x[5] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
     // -----------------
     // multiplies_digits
     // -----------------
@@ -271,8 +283,47 @@ struct TestInteger : CppUnit::TestFixture {
         const int c[] = {2, 3, 4};
               int x[10];
         const int* p = divides_digits(a, a + 6, b, b + 3, x);
+        cout << "Test x size = " << (p - x) << endl;
         CPPUNIT_ASSERT(p - x == 3);
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_divides_digits_2 () {
+        const int a[] = {1, 3};
+        const int b[] = {5, 6, 7};
+        const int c[] = {0};
+              int x[10];
+        const int* p = divides_digits(a, a + 2, b, b + 3, x);
+        CPPUNIT_ASSERT(p - x == 1);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_divides_digits_3 () {
+        const int a[] = {9};
+        const int b[] = {1};
+        const int c[] = {9};
+              int x[10];
+        const int* p = divides_digits(a, a + 1, b, b + 1, x);
+        CPPUNIT_ASSERT(p - x == 1);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_divides_digits_4 () {
+        const int a[] = {9};
+        const int b[] = {2};
+        const int c[] = {4};
+              int x[10];
+        const int* p = divides_digits(a, a + 1, b, b + 1, x);
+        CPPUNIT_ASSERT(p - x == 1);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_divides_digits_5 () {
+        const int a[] = {0};
+        const int b[] = {2};
+        const int c[] = {0};
+              int x[10];
+        const int* p = divides_digits(a, a + 1, b, b + 1, x);
+        CPPUNIT_ASSERT(p - x == 1);
+        cout << "divide " << x[0] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
 
     // -----------
     // constructor
@@ -287,19 +338,52 @@ struct TestInteger : CppUnit::TestFixture {
 
     void test_constructor_2 () {
         try {
-            const Integer<int> x("2");}
+            const Integer<int> x("-abc");
+            CPPUNIT_ASSERT(false);}
         catch (std::invalid_argument& e) {
-            CPPUNIT_ASSERT(false);}}
+            CPPUNIT_ASSERT(strcmp(e.what(), "Integer()"));}}
 
     void test_constructor_3 () {
         try {
-            const Integer<int> x(2);}
+            const Integer<int> x("2");}
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
     void test_constructor_4 () {
         try {
+            const Integer<int> x("-2");}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}}
+
+    void test_constructor_5 () {
+        try {
+            const Integer<int> x(2);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}}
+
+    void test_constructor_6 () {
+        try {
             const Integer<int> x(-442);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}}
+
+    void test_constructor_7 () {
+        try {
+            const Integer<int> x("-1c");
+            CPPUNIT_ASSERT(false);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(strcmp(e.what(), "Integer()"));}}
+
+    void test_constructor_8 () {
+        try {
+            const Integer<int> x("");
+            CPPUNIT_ASSERT(false);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(strcmp(e.what(), "Integer()"));}}
+
+    void test_constructor_9 () {
+        try {
+            const Integer<int> x(0);}
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
@@ -413,16 +497,31 @@ struct TestInteger : CppUnit::TestFixture {
     CPPUNIT_TEST(test_minus_digits_3);
     CPPUNIT_TEST(test_minus_digits_4);
     CPPUNIT_TEST(test_minus_digits_5);
+    CPPUNIT_TEST(test_minus_digits_6);
     CPPUNIT_TEST(test_multiplies_digits);
     CPPUNIT_TEST(test_multiplies_digits_2);
     CPPUNIT_TEST(test_multiplies_digits_3);
     CPPUNIT_TEST(test_multiplies_digits_4);
     CPPUNIT_TEST(test_multiplies_digits_5);
-    // CPPUNIT_TEST(test_divides_digits);
+    CPPUNIT_TEST(test_divides_digits);
+    CPPUNIT_TEST(test_divides_digits_2);
+    CPPUNIT_TEST(test_divides_digits_3);
+    CPPUNIT_TEST(test_divides_digits_4);
+    CPPUNIT_TEST(test_divides_digits_5);
+
+
     CPPUNIT_TEST(test_constructor_1);
     CPPUNIT_TEST(test_constructor_2);
     CPPUNIT_TEST(test_constructor_3);
     CPPUNIT_TEST(test_constructor_4);
+    CPPUNIT_TEST(test_constructor_5);
+    CPPUNIT_TEST(test_constructor_6);
+    CPPUNIT_TEST(test_constructor_7);
+    CPPUNIT_TEST(test_constructor_8);
+    CPPUNIT_TEST(test_constructor_9);
+
+
+
     // CPPUNIT_TEST(test_abs_1);
     // CPPUNIT_TEST(test_abs_2);
     // CPPUNIT_TEST(test_negation);
