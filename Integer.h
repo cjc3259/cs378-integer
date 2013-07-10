@@ -486,7 +486,7 @@ class Integer {
      */
     friend bool operator == (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        return false;
+        return (lhs.v == rhs.v);
     }
 
     // -----------
@@ -494,7 +494,7 @@ class Integer {
     // -----------
 
     /**
-     * <your documentation>
+     *  Operator checks for the negation of equivalence
      */
     friend bool operator != (const Integer& lhs, const Integer& rhs) {
         return !(lhs == rhs);}
@@ -508,7 +508,7 @@ class Integer {
      */
     friend bool operator < (const Integer& lhs, const Integer& rhs) {
         // <your code>
-        return false;}
+        return (lhs.v < rhs.v;}
 
     // -----------
     // operator <=
