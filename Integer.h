@@ -610,9 +610,9 @@ class Integer  {
     friend std::ostream& operator << (std::ostream& lhs, const Integer& rhs) {
         // <your code>
         // o_interator<int> out_it
-        Integer<T, C> x = rhs;
-        for (int i = 0; i < x.size(); ++i) {
-            lhs << x.value(i);
+        // Integer<T, C> x = rhs;
+        for (int i = 0; i < rhs.v.size(); ++i) {
+            lhs << rhs.v[i];
         }
         return lhs;}
 
@@ -766,17 +766,17 @@ class Integer  {
         // ~Integer ();
         // Integer& operator = (const Integer&);
 
-        long size() {
-            return v.size();
-        }
+        // long size() {
+        //     return v.size();
+        // }
 
-        int value(int i) {
-            return v[i];
-        }
+        // int value(int i) {
+        //     return v[i];
+        // }
 
-        void set(int i, int val) {
-            v[i] = val;
-        }
+        // void set(int i, int val) {
+        //     v[i] = val;
+        // }
 
         // template<class II>
         // void assign (II first, II last){
@@ -849,13 +849,12 @@ class Integer  {
          */
         Integer& operator += (const Integer& rhs) {
             // <your code>
-            Integer<T, C> x = *this;
-            Integer<T, C> y = rhs;
+            
             Integer<T, C> z = Integer<T, C>(0);
             z.v.resize(1332);
             int* begin = (z).array_iter(0);
             int* end = (z).array_iter(0) + 1;
-            end = plus_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            end = plus_digits((*this).v.begin(), (*this).v.begin() + (*this).v.size(), rhs.v.begin(), rhs.v.begin() + rhs.v.size(), begin);
             (*this).v.clear();
             (*this).v.resize(1332);
             (*this).v.assign(begin, end);
@@ -870,15 +869,14 @@ class Integer  {
          */
         Integer& operator -= (const Integer& rhs) {
             // <your code>
-            Integer<T, C> x = *this;
-            Integer<T, C> y = rhs;
+            
             Integer<T, C> z = Integer<T, C>(0);
-            z.v.resize((*this).size());
+            z.v.resize((*this).v.size());
             int* begin = (z).array_iter(0);
             int* end = (z).array_iter(0) + 1;
-            end = minus_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            end = minus_digits((*this).v.begin(), (*this).v.begin() + (*this).v.size(), rhs.v.begin(), rhs.v.begin() + rhs.v.size(), begin);
             (*this).v.clear();
-            (*this).v.resize((*this).size());
+            (*this).v.resize((*this).v.size());
             (*this).v.assign(begin, end);
             return *this;}
 
@@ -892,16 +890,15 @@ class Integer  {
         Integer& operator *= (const Integer& rhs) {
             // <your code>
    
-            Integer<T, C> x = *this;
-            Integer<T, C> y = rhs;
+            
             Integer<T, C> z = Integer<T, C>(0);
             // cout << "+ " << endl;
-            z.v.resize((*this).size() + 1);
+            z.v.resize((*this).v.size() + 1);
             int* begin = (z).array_iter(0);
             int* end = (z).array_iter(0) + 1;
-            end = multiplies_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            end = multiplies_digits((*this).v.begin(), (*this).v.begin() + (*this).v.size(), rhs.v.begin(), rhs.v.begin() + rhs.v.size(), begin);
             (*this).v.clear();
-            (*this).v.resize((*this).size() + 1);
+            (*this).v.resize((*this).v.size() + 1);
             (*this).v.assign(begin, end);
             return *this;}
 
@@ -915,20 +912,19 @@ class Integer  {
          */
         Integer& operator /= (const Integer& rhs) {
             // <your code>
-            Integer<T, C> x = *this;
-            Integer<T, C> y = rhs;
+            
             Integer<T, C> z = Integer<T, C>(0);
-            z.v.resize((*this).size());
+            z.v.resize((*this).v.size());
             int* begin = (z).array_iter(0);
             int* end = (z).array_iter(0) + 1;
-            end = divides_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            end = divides_digits((*this).v.begin(), (*this).v.begin() + (*this).v.size(), rhs.v.begin(), rhs.v.begin() + rhs.v.size(), begin);
             cout << "divide " << endl;
             for(int i = 0; i < end - begin; ++i) {
                 cout << *(begin + 1) ;
             }
             cout << endl;
             (*this).v.clear();
-            (*this).v.resize((*this).size());
+            (*this).v.resize((*this).v.size());
             (*this).v.assign(begin, end);
             return *this;}
 
@@ -953,18 +949,18 @@ class Integer  {
          */
         Integer& operator <<= (int n) {
             // <your code>
-            Integer<T, C> x = *this;
+            
             Integer<T, C> z = Integer<T, C>(0);
-            z.v.resize((*this).size() + n);
+            z.v.resize((*this).v.size() + n);
             int* begin = (z).array_iter(0);
             int* end = (z).array_iter(0) + 1;
-            end = shift_left_digits(x.v.begin(), x.v.begin() + x.v.size(), n, begin);
+            end = shift_left_digits((*this).v.begin(), (*this).v.begin() + (*this).v.size(), n, begin);
             // for(int i = 0; i < end - begin; ++i) {
             //     cout << *(begin + 1) ;
             // }
             // cout << endl;
             (*this).v.clear();
-            (*this).v.resize((*this).size() + 1);
+            (*this).v.resize((*this).v.size() + 1);
             (*this).v.assign(begin, end);
             return *this;}
 
@@ -977,18 +973,18 @@ class Integer  {
          */
         Integer& operator >>= (int n) {
             // <your code>
-            Integer<T, C> x = *this;
+            
             Integer<T, C> z = Integer<T, C>(0);
-            z.v.resize((*this).size());
+            z.v.resize((*this).v.size());
             int* begin = (z).array_iter(0);
             int* end = (z).array_iter(0) + 1;
-            end = shift_right_digits(x.v.begin(), x.v.begin() + x.v.size(), n, begin);
+            end = shift_right_digits((*this).v.begin(), (*this).v.begin() + (*this).v.size(), n, begin);
             // for(int i = 0; i < end - begin; ++i) {
             //     cout << *(begin + 1) ;
             // }
             // cout << endl;
             (*this).v.clear();
-            (*this).v.resize((*this).size());
+            (*this).v.resize((*this).v.size());
             (*this).v.assign(begin, end);
             return *this;}
 
