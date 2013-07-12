@@ -179,10 +179,16 @@ OI plus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     }
 
     // reverse the order of the numbers for output
+    
+
+    // y.assign(x - count, x);
+    // reverse(y.begin(), y.end());
+    
+    // reverse(y.begin(), y.end());
+
     vector<int> y(x - count, x);
-    reverse(y.begin(), y.end());
     x = x - count;
-    for(int i = 0; i < y.size(); i++){
+    for(int i = y.size() - 1; i >= 0; --i){
         *x = y[i];
         x++;
     }
@@ -221,13 +227,11 @@ OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
             }
             else {
                 minuend = *e1 - 1;
-                // cout << minuend << endl;
                 borrow = false;
             }
         }
         if (minuend < *e2) {
             minuend = minuend + 10;
-            // cout << minuend << endl;
             borrow = true;
         }
         *x = minuend - *e2;
@@ -264,9 +268,9 @@ OI minus_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     }
 
     // reverse order and output
-    reverse(y.begin(), y.end());
+    // reverse(y.begin(), y.end());
     x = x - count;
-    for(int i = 0; i < y.size(); i++){
+    for(int i = y.size() - 1; i >= 0; --i){
         *x = y[i];
         x++;
     }
@@ -293,9 +297,13 @@ OI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     int s1 = distance(b1, e1);
     int s2 = distance(b2, e2);
     vector<int> m1;
+    // m1.resize(40000);
     vector<int> m2;
     vector<vector<int> > w;
+    // w[0].resize(40000);
 
+    for (int i = 0; i < (e1 - b1); ++i) {
+    }
     // if either number is 0, output 0
     if((*b1 == 0 && (e1 - b1) == 1) || (*b2 == 0 && (e2 - b2) == 1)) {
         *x = 0;
@@ -305,18 +313,19 @@ OI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     // order the two numbers, 'biggest' first
     if (s1 >= s2) {
         for(int i = 0; i < s1; ++i) {
-            m1.push_back(*b1 + i);
+            m1.push_back(*(b1 + i));
         }
+    
         for(int i = 0; i < s2; ++i) {
-            m2.push_back(*b2 + i);
+            m2.push_back(*(b2 + i));
         }
     }
     else {
         for(int i = 0; i < s1; ++i) {
-            m2.push_back(*b1 + i);
+            m2.push_back(*(b1 + i));
         }
         for(int i = 0; i < s2; ++i) {
-            m1.push_back(*b2 + i);
+            m1.push_back(*(b2 + i));
         }
     }
 
@@ -330,15 +339,18 @@ OI multiplies_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
         }
         for(int k = 0; k < m1.size(); ++k) {
             int p = m2[m2.size() - 1 - i]*m1[m1.size() - 1 - k] + carry;
+            carry = 0;
             if(p > 9) {
                 carry = p/10;
                 p = p%10;
             }
             w[i].push_back(p);
         }
+            
         if (carry != 0) {
             w[i] .push_back(carry);
         }
+        
     }
 
     // add up multiple vectors of numbers to get the final product
@@ -377,22 +389,6 @@ template <typename II1, typename II2, typename OI>
 OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     // <your code>
 
- //    int sub_counter = 0;		// Counts the number of time sub can be called (quotient)
-	// int divSize = distance(b2, e2);	// Size of the divisor array
- //    int subValue[distance(b2, e2)];
-
-	// // Calls minus_digits in increments the size of the divisor
- //    while (b1 != e1){
- //        // Need to call minus_digits here to initialize subValue
-	// 	while (*subValue > 0){
-	// 		minus_digits(b1, b1 + divSize, b2, e2, subValue); 
-	// 		++sub_counter;
-	// 	}
-	// 	++digit_counter;
-	// 	*x = sub_counter;		// Places first value of quotient in x
-	// 	++x;
- //    }
-    
 	int s1 = distance(b1, e1);
     int s2 = distance(b2, e2);
     *x = 0;
@@ -403,10 +399,9 @@ OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
     if(s1 == 1 && *b1 == 0) 
         return x + 1;
 
-    // cout << "test" << endl;
     bool less_than = false;
     vector<int> divisor;
-    int* divisor_end = &divisor[0] + 1;
+    // int* divisor_end = &divisor[0] + 1;
     vector<int> dummy;
     int* dummy_end = &dummy[0] + 1;
     dummy.push_back(0);
@@ -421,26 +416,18 @@ OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
 
     for(int i = 0; i < s1; ++i) {
         divisor.push_back(*(b1 + i));
-        cout << divisor[i];
     }
-    cout << endl;
 
     for(int i = 0; i < s2; ++i) {
-        cout << *(b2 + i);
     }
-    cout << endl;
-    // cout << "test" << endl;
+    
     while (!less_than) {
         dummy_end = minus_digits(divisor.begin(), divisor.end(), b2, e2, &dummy[0]);
-        // cout << "test" << endl;
 
-        // cout << dummy.size() << endl;
         divisor.clear();
         for (int i = 0; i < (dummy_end - &dummy[0]); ++i) {
             divisor.push_back(dummy[i]);
-            // cout << divisor[i];
         }
-        // cout << endl;
 
 
 
@@ -449,10 +436,7 @@ OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
         count.clear();
         for(int i = 0; i < (x_end - x); ++i) {
             count.push_back(*(x + i));
-            // cout << *(x + i);
         }
-        // cout <<endl;
-        // cout << "x size = " << x_end - x << endl;
 
         s1 = distance(divisor.begin(), divisor.end());
         
@@ -464,11 +448,12 @@ OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
                     less_than = true;
                     break;
                 }
+                else if (*(divisor.begin() + i) > *(b2 + i))
+                    break;
             }
         }
 
     }
-    cout << "x size = " << x_end - x << endl;
     return x_end;}
 
 // -------
@@ -476,7 +461,8 @@ OI divides_digits (II1 b1, II1 e1, II2 b2, II2 e2, OI x) {
 // -------
 
 template < typename T, typename C = std::vector<T> >
-class Integer : public vector<int> {
+class Integer  {
+
     // -----------
     // operator ==
     // -----------
@@ -486,7 +472,6 @@ class Integer : public vector<int> {
      */
     friend bool operator == (const Integer& lhs, const Integer& rhs) {
         // <your code>
-
         return lhs.v == rhs.v;
     }
 
@@ -495,7 +480,7 @@ class Integer : public vector<int> {
     // -----------
 
     /**
-     * <your documentation>
+     * != works
      */
     friend bool operator != (const Integer& lhs, const Integer& rhs) {
         return !(lhs == rhs);}
@@ -516,7 +501,7 @@ class Integer : public vector<int> {
     // -----------
 
     /**
-     * <your documentation>
+     * <= works
      */
     friend bool operator <= (const Integer& lhs, const Integer& rhs) {
         return !(rhs < lhs);}
@@ -526,7 +511,7 @@ class Integer : public vector<int> {
     // ----------
 
     /**
-     * <your documentation>
+     * > works
      */
     friend bool operator > (const Integer& lhs, const Integer& rhs) {
         return (rhs < lhs);}
@@ -536,7 +521,7 @@ class Integer : public vector<int> {
     // -----------
 
     /**
-     * <your documentation>
+     * >= works
      */
     friend bool operator >= (const Integer& lhs, const Integer& rhs) {
         return !(lhs < rhs);}
@@ -546,7 +531,7 @@ class Integer : public vector<int> {
     // ----------
 
     /**
-     * <your documentation>
+     * addition works
      */
     friend Integer operator + (Integer lhs, const Integer& rhs) {
         return lhs += rhs;}
@@ -556,7 +541,7 @@ class Integer : public vector<int> {
     // ----------
 
     /**
-     * <your documentation>
+     * subtraction works
      */
     friend Integer operator - (Integer lhs, const Integer& rhs) {
         return lhs -= rhs;}
@@ -566,7 +551,7 @@ class Integer : public vector<int> {
     // ----------
 
     /**
-     * <your documentation>
+     * multiplication works
      */
     friend Integer operator * (Integer lhs, const Integer& rhs) {
         return lhs *= rhs;}
@@ -576,7 +561,7 @@ class Integer : public vector<int> {
     // ----------
 
     /**
-     * <your documentation>
+     * division works
      * @throws invalid_argument if (rhs == 0)
      */
     friend Integer operator / (Integer lhs, const Integer& rhs) {
@@ -620,11 +605,16 @@ class Integer : public vector<int> {
     // -----------
 
     /**
-     * <your documentation>
+     * output stream works
      */
     friend std::ostream& operator << (std::ostream& lhs, const Integer& rhs) {
         // <your code>
-        return lhs << "0";}
+        // o_interator<int> out_it
+        Integer<T, C> x = rhs;
+        for (int i = 0; i < x.size(); ++i) {
+            lhs << x.value(i);
+        }
+        return lhs;}
 
     // ---
     // abs
@@ -667,26 +657,6 @@ class Integer : public vector<int> {
 
         bool valid () const {
             // <your code>
-/*
-            if(typeid(*this).name() == "vector<int>" || typeid(*this).name() == "deque<int>")
-                return true;
-            else return false;*/
-  //           typename C::value_type type;
-  //           cout << "Type Name: " << type << endl;
-  //           if (type < 0){
-		// cout << "Returning False!" << endl;
-  //               return false;}
-  //           return true;
-            // for (int i = 0; i < *this.size(); ++i) {
-            //     // cout << "char value = " << value[i] << endl;
-            //     // cout << "is negative " << value.find_first_of('-') << endl;
-
-            //     if(*this.find_first_of('-') == i)
-            //         continue;
-            //     if(!(isdigit(this[i]))) {
-            //         return false;   
-            //     }
-            // }
 
             if(v.empty())
                 return false;
@@ -694,12 +664,14 @@ class Integer : public vector<int> {
         }
 
     public:
+
+        
         // ------------
         // constructors
         // ------------
 
         /**
-         * <your documentation>
+         * int constructor
          */
         Integer (int value) {
             // <your code>
@@ -716,16 +688,10 @@ class Integer : public vector<int> {
                 value/=10;
             }
             reverse(v.begin(), v.end());
-            // for (int i = 0; i < v.size(); ++i) {
-            //     cout << v[i];
-            // }
-            // cout << endl;
-            // typename C::value_type s;
-            // cout << "s " << s << endl;
             assert(valid());}
 
         /**
-         * <your documentation>
+         * string constructor
          * @throws invalid_argument if value is not a valid representation of an Integer
          */
         explicit Integer (const std::string& value) {
@@ -733,25 +699,17 @@ class Integer : public vector<int> {
             
 
             bool isInteger = true;
-            // cout << value << endl;
-            // cout << "True = " << isInteger << endl;
-            // string copy = value;
             for (int i = 0; i < value.size(); ++i) {
-                // cout << "char value = " << value[i] << endl;
-                // cout << "is negative " << value.find_first_of('-') << endl;
 
                 if(value.find_first_of('-') == i)
                     continue;
-                // cout << "isdigit" << isdigit(value[i]) << endl;
                 if(!(isdigit(value[i]))) {
                     isInteger = false;
                     break;   
                 }
             }
-            // cout << "isInteger " << isInteger << endl;
             if (isInteger) {
                 int i = atoi(value.c_str());
-                // cout << i << endl;
                 while(i != 0) {
                     int d = i%10;
                     if(!(i < 10 && i > -10)){
@@ -762,43 +720,73 @@ class Integer : public vector<int> {
                     else v.push_back(d);
                     i/=10;
                 }
-                reverse(v.begin(), v.end());
-                // for (int i = 0; i < v.size(); ++i) {
-                //     cout << v[i];
-                // }
-                // cout << endl;
+                reverse(v.begin(),v.end());
+                
             }
-            //cout << typeid(v).name() << endl;
             
-            // cout << "empty? " << v.empty() << endl;
             if (!valid())
                 throw std::invalid_argument("Integer::Integer()");
         }
+
+        // typedef Integer<T, C>::iterator iterator;
+        // typedef Integer<T, C>::const_iterator const_iterator;
+
+
+        // iterator begin() {
+        //     // cout << typeid(v).name();
+        //     return v.begin();
+        // }
+        // iterator end() {
+        //     return v.end();
+        // }
+
+        int* array_iter(int i) {
+            return &v[i];
+        }
+
+        // void push_back(int i) {
+        //     v.push_back(i);
+        // }
+
+        // void pop_back() {
+        //     v.pop_back();
+        // }
+
+        // void clear() {
+        //     v.clear();
+        // }
+
+        // void resize(int n) {
+        //     v.resize(n);
+        // }
+
 
         // Default copy, destructor, and copy assignment.
         // Integer (const Integer&);
         // ~Integer ();
         // Integer& operator = (const Integer&);
 
-        // bool empty() {
-        //     return v.empty();
-        // }
-
         long size() {
             return v.size();
         }
 
-        // int front() {
-        //     return v.front();
+        int value(int i) {
+            return v[i];
+        }
+
+        void set(int i, int val) {
+            v[i] = val;
+        }
+
+        // template<class II>
+        // void assign (II first, II last){
+        //     v.assign(first, last);
         // }
 
-        // int back() {
-        //     return v.back();
+        // void assign (size_type n, const value_type& val) {
+        //     v.assign(n, val);
         // }
 
-        // const int* begin() {
-        //     return v.begin();
-        // }
 
         // ----------
         // operator -
@@ -809,10 +797,8 @@ class Integer : public vector<int> {
          */
         Integer operator - () const {
             // <your code>
-            // Integer x = *this;
-            // x *= 2;
-            // *this -= x;
 
+            // cout << *((*this).begin()) << endl;
             return *this;}
 
         // -----------
@@ -831,7 +817,7 @@ class Integer : public vector<int> {
          * <your documentation>
          */
         Integer operator ++ (int) {
-            Integer x = *this;
+            Integer<T, C> x = *this;
             ++(*this);
             return x;}
 
@@ -850,7 +836,7 @@ class Integer : public vector<int> {
          * <your documentation>
          */
         Integer operator -- (int) {
-            Integer x = *this;
+            Integer<T, C> x = *this;
             --(*this);
             return x;}
 
@@ -863,35 +849,17 @@ class Integer : public vector<int> {
          */
         Integer& operator += (const Integer& rhs) {
             // <your code>
-            Integer<int> z = *this;
-            
-
-            cout << "+" << endl;
-            Integer<int> x = *this;
-            Integer<int> y = rhs;
-            cout << "size " << z.size() << endl;
-            cout << "size " << y.size() << endl;
-
-            int* end = &z[0] + 1;
-            z.push_back(0);
-            z.clear();
-            cout << "+" << endl;
-            // int s1 = distance(&rhs[0], &rhs[0] + rhs.size());
-            // int s2 = distance(x.begin(), x.end());
-            // cout << s1 << endl;
-            // cout << s2 << endl;
-            // cout << rhs[0] << endl;
-            int u[10];
-            cout << z[0] << endl;
-            end = multiplies_digits(x.begin(), x.begin() + x.size(), y.begin(), y.begin() + y.size(), u);
-            assert(false); 
-            // fill(z.begin(), z.begin() + 1, y.begin());
-            cout << "+" << endl;
-            for (int i =0; i < (end - &z[0]); ++i) {
-                z.push_back(z[i]);
-            }
-            
-            return z;}
+            Integer<T, C> x = *this;
+            Integer<T, C> y = rhs;
+            Integer<T, C> z = Integer<T, C>(0);
+            z.v.resize(1332);
+            int* begin = (z).array_iter(0);
+            int* end = (z).array_iter(0) + 1;
+            end = plus_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            (*this).v.clear();
+            (*this).v.resize(1332);
+            (*this).v.assign(begin, end);
+            return *this;}
 
         // -----------
         // operator -=
@@ -902,7 +870,16 @@ class Integer : public vector<int> {
          */
         Integer& operator -= (const Integer& rhs) {
             // <your code>
-            *this = *this - rhs;
+            Integer<T, C> x = *this;
+            Integer<T, C> y = rhs;
+            Integer<T, C> z = Integer<T, C>(0);
+            z.v.resize((*this).size());
+            int* begin = (z).array_iter(0);
+            int* end = (z).array_iter(0) + 1;
+            end = minus_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            (*this).v.clear();
+            (*this).v.resize((*this).size());
+            (*this).v.assign(begin, end);
             return *this;}
 
         // -----------
@@ -914,9 +891,18 @@ class Integer : public vector<int> {
          */
         Integer& operator *= (const Integer& rhs) {
             // <your code>
-            // cout << "*=";
-            // Integer x = *this;
-            // int* end = multiplies_digits(rhs.begin(), rhs.end(), this.begin(), this.end(), &x); 
+   
+            Integer<T, C> x = *this;
+            Integer<T, C> y = rhs;
+            Integer<T, C> z = Integer<T, C>(0);
+            // cout << "+ " << endl;
+            z.v.resize((*this).size() + 1);
+            int* begin = (z).array_iter(0);
+            int* end = (z).array_iter(0) + 1;
+            end = multiplies_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            (*this).v.clear();
+            (*this).v.resize((*this).size() + 1);
+            (*this).v.assign(begin, end);
             return *this;}
 
         // -----------
@@ -929,6 +915,21 @@ class Integer : public vector<int> {
          */
         Integer& operator /= (const Integer& rhs) {
             // <your code>
+            Integer<T, C> x = *this;
+            Integer<T, C> y = rhs;
+            Integer<T, C> z = Integer<T, C>(0);
+            z.v.resize((*this).size());
+            int* begin = (z).array_iter(0);
+            int* end = (z).array_iter(0) + 1;
+            end = divides_digits(x.v.begin(), x.v.begin() + x.v.size(), y.v.begin(), y.v.begin() + y.v.size(), begin);
+            cout << "divide " << endl;
+            for(int i = 0; i < end - begin; ++i) {
+                cout << *(begin + 1) ;
+            }
+            cout << endl;
+            (*this).v.clear();
+            (*this).v.resize((*this).size());
+            (*this).v.assign(begin, end);
             return *this;}
 
         // -----------
@@ -952,6 +953,19 @@ class Integer : public vector<int> {
          */
         Integer& operator <<= (int n) {
             // <your code>
+            Integer<T, C> x = *this;
+            Integer<T, C> z = Integer<T, C>(0);
+            z.v.resize((*this).size() + n);
+            int* begin = (z).array_iter(0);
+            int* end = (z).array_iter(0) + 1;
+            end = shift_left_digits(x.v.begin(), x.v.begin() + x.v.size(), n, begin);
+            // for(int i = 0; i < end - begin; ++i) {
+            //     cout << *(begin + 1) ;
+            // }
+            // cout << endl;
+            (*this).v.clear();
+            (*this).v.resize((*this).size() + 1);
+            (*this).v.assign(begin, end);
             return *this;}
 
         // ------------
@@ -963,7 +977,21 @@ class Integer : public vector<int> {
          */
         Integer& operator >>= (int n) {
             // <your code>
+            Integer<T, C> x = *this;
+            Integer<T, C> z = Integer<T, C>(0);
+            z.v.resize((*this).size());
+            int* begin = (z).array_iter(0);
+            int* end = (z).array_iter(0) + 1;
+            end = shift_right_digits(x.v.begin(), x.v.begin() + x.v.size(), n, begin);
+            // for(int i = 0; i < end - begin; ++i) {
+            //     cout << *(begin + 1) ;
+            // }
+            // cout << endl;
+            (*this).v.clear();
+            (*this).v.resize((*this).size());
+            (*this).v.assign(begin, end);
             return *this;}
+
 
         // ---
         // abs
@@ -975,6 +1003,7 @@ class Integer : public vector<int> {
          */
         Integer& abs () {
             // <your code>
+            // if 
             return *this;}
 
         // ---
@@ -989,18 +1018,18 @@ class Integer : public vector<int> {
          */
         Integer& pow (int e) {
             // <your code>
-            Integer x = *this;
-            Integer y = *this;
-            cout << "assign x" << endl;
-            for(int i = 0; i < e; ++i){
-                cout << "increment";
-                y = x * y;
+            // cout << "+ " << endl;
+            Integer<T, C> x = *this;
+            // Integer<T, C> y = *this;
+            // cout << "+ " << endl;
+            for(int i = 1; i < e; ++i) {
+                *this *= x;
+                // cout << (*this).v.size() << endl;
+                // cout << i + 1 << endl;
             }
-            cout << endl;
-            return y;}};
-
-        // long size() {
-        //     return *this.size();
-        // }
+            
+            return *this;
+        }
+    };
 
 #endif // Integer_h

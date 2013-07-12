@@ -150,6 +150,17 @@ struct TestInteger : CppUnit::TestFixture {
         // cout << x[0] << x[1] << x[2] << x[3] << endl;
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
 
+    void test_plus_digits_7 () {
+        const int a[] = {9, 0, 0};
+        const int b[] = {1};
+        const int c[] = {9, 0, 1};
+              int x[10];
+        const int* p = plus_digits(a, a + 3, b, b + 1, x);
+        // cout << p - x << endl;
+        CPPUNIT_ASSERT(p - x == 3);
+        // cout << x[0] << x[1] << x[2] << x[3] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
     // ------------
     // minus_digits
     // ------------
@@ -273,6 +284,53 @@ struct TestInteger : CppUnit::TestFixture {
         CPPUNIT_ASSERT(p - x == 1);
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
 
+    void test_multiplies_digits_6 () {
+        const int a[] = {9, 0};
+        const int b[] = {1};
+        const int c[] = {9, 0};
+              int x[10];
+        const int* p = multiplies_digits(a, a + 2, b, b + 1, x);
+        CPPUNIT_ASSERT(p - x == 2);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_multiplies_digits_7 () {
+        const int a[] = {8, 5};
+        const int b[] = {2};
+        const int c[] = {1, 7, 0};
+              int x[10];
+        const int* p = multiplies_digits(a, a + 2, b, b + 1, x);
+        CPPUNIT_ASSERT(p - x == 3);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_multiplies_digits_8 () {
+        const int a[] = {8, 0};
+        const int b[] = {1};
+        const int c[] = {8, 0};
+              int x[10];
+        const int* p = multiplies_digits(a, a + 2, b, b + 1, x);
+        CPPUNIT_ASSERT(p - x == 2);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_multiplies_digits_9 () {
+        const int a[] = {1, 5};
+        const int b[] = {2};
+        const int c[] = {3, 0};
+              int x[10];
+        const int* p = multiplies_digits(a, a + 2, b, b + 1, x);
+        cout << "p - x" << p - x << endl;
+        CPPUNIT_ASSERT(p - x == 2);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_multiplies_digits_10 () {
+        const int a[] = {1, 3, 4, 2, 1, 7, 7, 2, 8};
+        const int b[] = {2};
+        const int c[] = {2, 6, 8, 4, 3, 5, 4, 5, 6};
+              int x[20];
+        const int* p = multiplies_digits(a, a + 9, b, b + 1, x);
+        // cout << "p - x" << p - x << endl;
+        CPPUNIT_ASSERT(p - x == 9);
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
     // --------------
     // divides_digits
     // --------------
@@ -321,7 +379,15 @@ struct TestInteger : CppUnit::TestFixture {
               int x[10];
         const int* p = divides_digits(a, a + 1, b, b + 1, x);
         CPPUNIT_ASSERT(p - x == 1);
-        cout << "divide " << x[0] << endl;
+        CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
+
+    void test_divides_digits_6 () {
+        const int a[] = {4, 5, 3, 4, 5};
+        const int b[] = {5, 3, 4, 5};
+        const int c[] = {8};
+              int x[10];
+        const int* p = divides_digits(a, a + 5, b, b + 4, x);
+        CPPUNIT_ASSERT(p - x == 1);
         CPPUNIT_ASSERT(std::equal(const_cast<const int*>(x), p, c));}
 
 
@@ -358,6 +424,7 @@ struct TestInteger : CppUnit::TestFixture {
     void test_constructor_5 () {
         try {
             const Integer<int> x(2);}
+            // cout << x << endl;
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
@@ -434,6 +501,7 @@ struct TestInteger : CppUnit::TestFixture {
         try {
             const Integer<int> x = 98765;
             const Integer<int> y = -x;
+            cout << y << endl;
             CPPUNIT_ASSERT(y == -98765);}
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
@@ -458,34 +526,247 @@ struct TestInteger : CppUnit::TestFixture {
     void test_pow_1 () {
         try {
             cout << "test_pow" << endl;
-            Integer<int>       x = 98765;
-            const int          e =  9867;
+            Integer<int>       x = 10;
+            const int          e =  7;
             Integer<int>&      y = x.pow(e);
-            CPPUNIT_ASSERT( e == 9867);
-            CPPUNIT_ASSERT( x ==    0);
+            CPPUNIT_ASSERT( e == 7);
+            CPPUNIT_ASSERT( x ==    10000000);
             CPPUNIT_ASSERT(&x ==   &y);}
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
     void test_pow_2 () {
         try {
-            const Integer<int> x = 98765;
-            const int          e =  9867;
-            const Integer<int> y = pow(x, e);
-            CPPUNIT_ASSERT(x == 98765);
-            CPPUNIT_ASSERT(e ==  9867);
-            CPPUNIT_ASSERT(y ==     0);}
+            cout << "test_pow" << endl;
+            Integer<int>       x = 2;
+            const int          e =  19;
+            Integer<int>&      y = x.pow(e);
+            CPPUNIT_ASSERT( e == 19);
+            CPPUNIT_ASSERT( x ==    524288);
+            CPPUNIT_ASSERT(&x ==   &y);}
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}}
 
+    void test_pow_3 () {
+        try {
+            Integer<int>       x = 9;
+            const int          e =  2;
+            Integer<int>&      y = x.pow(e);
+            CPPUNIT_ASSERT( e == 2);
+            CPPUNIT_ASSERT( x ==    81);
+            CPPUNIT_ASSERT(&x ==   &y);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}}
+
+    void test_pow_4 () {
+        try {
+            Integer<int>       x = 9;
+            const int          e =  3;
+            Integer<int>&      y = x.pow(e);
+            CPPUNIT_ASSERT( e == 3);
+            CPPUNIT_ASSERT( x ==    729);
+            CPPUNIT_ASSERT(&x ==   &y);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}}
+
+
+
     void test_Integer_plus() {
         try {
-            const Integer<int> x = 100000;
+            const Integer<int> x = 900;
             const Integer<int> y = 1;
             const Integer<int> z = x + y;
-            CPPUNIT_ASSERT(x == 1);
+            // cout << z << endl;
+            CPPUNIT_ASSERT(x == 900);
             CPPUNIT_ASSERT(y == 1);
-            CPPUNIT_ASSERT(z == 2);}
+            CPPUNIT_ASSERT(z == 901);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_plus_2() {
+        try {
+            const Integer<int> x = 85;
+            const Integer<int> y = 900;
+            const Integer<int> z = x + y;
+            // cout << z << endl;
+            CPPUNIT_ASSERT(x == 85);
+            CPPUNIT_ASSERT(y == 900);
+            CPPUNIT_ASSERT(z == 985);}
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_multiply() {
+        try {
+            const Integer<int> x = 85;
+            const Integer<int> y = 2;
+            const Integer<int> z = x * y;
+            CPPUNIT_ASSERT(x == 85);
+            CPPUNIT_ASSERT(y == 2);
+            CPPUNIT_ASSERT(z == 170);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_multiply_2() {
+        try {
+            const Integer<int> x = 234;
+            const Integer<int> y = 567;
+            const Integer<int> z = x * y;
+            CPPUNIT_ASSERT(x == 234);
+            CPPUNIT_ASSERT(y == 567);
+            CPPUNIT_ASSERT(z == 132678);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_multiply_3() {
+        try {
+            const Integer<int> x = 85;
+            const Integer<int> y = 2;
+            const Integer<int> z = x * y;
+            CPPUNIT_ASSERT(x == 85);
+            CPPUNIT_ASSERT(y == 2);
+            CPPUNIT_ASSERT(z == 170);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_multiply_4() {
+        try {
+            const Integer<int> x = 16;
+            const Integer<int> y = 2;
+            const Integer<int> z = x * y;
+            CPPUNIT_ASSERT(x == 16);
+            CPPUNIT_ASSERT(y == 2);
+            CPPUNIT_ASSERT(z == 32);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_minus() {
+        try {
+            const Integer<int> x = 16;
+            const Integer<int> y = 2;
+            const Integer<int> z = x - y;
+            CPPUNIT_ASSERT(x == 16);
+            CPPUNIT_ASSERT(y == 2);
+            CPPUNIT_ASSERT(z == 14);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_minus_2() {
+        try {
+            const Integer<int> x = 16;
+            const Integer<int> y = 1;
+            const Integer<int> z = x - y;
+            CPPUNIT_ASSERT(x == 16);
+            CPPUNIT_ASSERT(y == 1);
+            CPPUNIT_ASSERT(z == 15);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_minus_3() {
+        try {
+            const Integer<int> x = 16;
+            const Integer<int> y = 0;
+            const Integer<int> z = x - y;
+            CPPUNIT_ASSERT(x == 16);
+            CPPUNIT_ASSERT(y == 0);
+            CPPUNIT_ASSERT(z == 16);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_divide() {
+        try {
+            const Integer<int> x = 16;
+            const Integer<int> y = 2;
+            const Integer<int> z = x/y;
+            cout << "z " << z << endl;
+            CPPUNIT_ASSERT(x == 16);
+            CPPUNIT_ASSERT(y == 2);
+            CPPUNIT_ASSERT(z == 8);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_divide_2() {
+        try {
+            const Integer<int> x = 16;
+            const Integer<int> y = 5;
+            const Integer<int> z = x/y;
+            cout << "z " << z << endl;
+            CPPUNIT_ASSERT(x == 16);
+            CPPUNIT_ASSERT(y == 5);
+            CPPUNIT_ASSERT(z == 3);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_divide_3() {
+        try {
+            const Integer<int> x = 44999;
+            const Integer<int> y = 5000;
+            const Integer<int> z = x/y;
+            cout << "z " << z << endl;
+            CPPUNIT_ASSERT(x == 44999);
+            CPPUNIT_ASSERT(y == 5000);
+            CPPUNIT_ASSERT(z == 8);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_divide_4() {
+        try {
+            const Integer<int> x = 45345;
+            const Integer<int> y = 5345;
+            const Integer<int> z = x/y;
+            cout << "z " << z << endl;
+            CPPUNIT_ASSERT(x == 45345);
+            CPPUNIT_ASSERT(y == 5345);
+            CPPUNIT_ASSERT(z == 8);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+
+    void test_Integer_shift_left() {
+        try {
+            Integer<int> x = 45345;
+            x <<= 2;
+            cout << "x " << x << endl;
+            CPPUNIT_ASSERT(x == 4534500);
+            // CPPUNIT_ASSERT(y == 5345);
+            // CPPUNIT_ASSERT(z == 8);
+        }
+        catch (std::invalid_argument& e) {
+            CPPUNIT_ASSERT(false);}
+    }
+
+    void test_Integer_shift_right() {
+        try {
+            Integer<int> x = 45345;
+            x >>= 2;
+            cout << "x " << x << endl;
+            CPPUNIT_ASSERT(x == 453);
+            // CPPUNIT_ASSERT(y == 5345);
+            // CPPUNIT_ASSERT(z == 8);
+        }
         catch (std::invalid_argument& e) {
             CPPUNIT_ASSERT(false);}
     }
@@ -504,22 +785,33 @@ struct TestInteger : CppUnit::TestFixture {
     CPPUNIT_TEST(test_plus_digits_4);
     CPPUNIT_TEST(test_plus_digits_5);
     CPPUNIT_TEST(test_plus_digits_6);
+    CPPUNIT_TEST(test_plus_digits_7);
     CPPUNIT_TEST(test_minus_digits);
     CPPUNIT_TEST(test_minus_digits_2);
     CPPUNIT_TEST(test_minus_digits_3);
     CPPUNIT_TEST(test_minus_digits_4);
     CPPUNIT_TEST(test_minus_digits_5);
     CPPUNIT_TEST(test_minus_digits_6);
+
     CPPUNIT_TEST(test_multiplies_digits);
     CPPUNIT_TEST(test_multiplies_digits_2);
     CPPUNIT_TEST(test_multiplies_digits_3);
     CPPUNIT_TEST(test_multiplies_digits_4);
     CPPUNIT_TEST(test_multiplies_digits_5);
+    CPPUNIT_TEST(test_multiplies_digits_6);
+    CPPUNIT_TEST(test_multiplies_digits_7);
+    CPPUNIT_TEST(test_multiplies_digits_8);
+    CPPUNIT_TEST(test_multiplies_digits_9);
+    CPPUNIT_TEST(test_multiplies_digits_10);
+
+
     CPPUNIT_TEST(test_divides_digits);
     CPPUNIT_TEST(test_divides_digits_2);
     CPPUNIT_TEST(test_divides_digits_3);
     CPPUNIT_TEST(test_divides_digits_4);
     CPPUNIT_TEST(test_divides_digits_5);
+    CPPUNIT_TEST(test_divides_digits_6);
+
 
 
     CPPUNIT_TEST(test_constructor_1);
@@ -532,17 +824,40 @@ struct TestInteger : CppUnit::TestFixture {
     CPPUNIT_TEST(test_constructor_8);
     CPPUNIT_TEST(test_constructor_9);
 
-
-
     // CPPUNIT_TEST(test_abs_1);
     // CPPUNIT_TEST(test_abs_2);
     CPPUNIT_TEST(test_equal_to);
     // CPPUNIT_TEST(test_negation);
-    // CPPUNIT_TEST(test_output);
-    // CPPUNIT_TEST(test_pow_1);
-    // CPPUNIT_TEST(test_pow_2);
+    CPPUNIT_TEST(test_output);
+    CPPUNIT_TEST(test_pow_1);
+    CPPUNIT_TEST(test_pow_2);
+    CPPUNIT_TEST(test_pow_3);
+    CPPUNIT_TEST(test_pow_4);
 
     CPPUNIT_TEST(test_Integer_plus);
+    CPPUNIT_TEST(test_Integer_plus_2);
+    CPPUNIT_TEST(test_Integer_multiply);
+    CPPUNIT_TEST(test_Integer_multiply_2);
+    CPPUNIT_TEST(test_Integer_multiply_3);
+    CPPUNIT_TEST(test_Integer_multiply_4);
+    CPPUNIT_TEST(test_Integer_minus);
+    CPPUNIT_TEST(test_Integer_minus_2);
+    CPPUNIT_TEST(test_Integer_minus_3);
+    CPPUNIT_TEST(test_Integer_divide);
+    CPPUNIT_TEST(test_Integer_divide_2);
+    CPPUNIT_TEST(test_Integer_divide_3);
+    CPPUNIT_TEST(test_Integer_divide_4);
+    CPPUNIT_TEST(test_Integer_shift_left);
+    CPPUNIT_TEST(test_Integer_shift_right);
+
+
+
+
+
+
+
+
+
     CPPUNIT_TEST_SUITE_END();};
 
 // ----

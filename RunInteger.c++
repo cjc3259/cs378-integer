@@ -28,8 +28,9 @@ To document the program:
 
 #include <iostream> // cout, endl
 #include <deque>    // deque
-
+#include <time.h>   // timer
 #include "Integer.h"
+
 
 // ----
 // main
@@ -43,13 +44,28 @@ int main () {
     // less than  15  s with    valgrind
     cout << "*** 20th Mersenne prime: 1,332 digits ***" << endl << endl;
 
-    {
-    const Integer<int> n = Integer<int>(2).pow(4423) - 1;
-    cout << "2^4423 - 1 = " << n << endl << endl;
-    }
+    
 
     {
+
+    clock_t init, final;
+    init = clock();
+    const Integer<int> n = Integer<int>(2).pow(4423) - 1;
+    final = clock()-init;
+    
+
+
+    // const Integer<int> n = Integer<int>(2).pow(4);
+
+    cout << "2^4423 - 1 = " << n << endl << endl;
+    cout << (double)final << endl;
+    }
+
+    cout << "TEST " << endl;
+    {
     const Integer< int, std::deque<int> > n = Integer< int, std::deque<int> >(2).pow(4423) - 1;
+    // const Integer< int, std::vector<int> > n = Integer< int, std::vector<int> >(2).pow(4423) - 1;
+
     cout << "2^4423 - 1 = " << n << endl << endl;
     }
 
@@ -59,13 +75,13 @@ int main () {
 
     // less than 4 min without valgrind
     // don't run with valgrind
-    cout << "*** 30th Mersenne prime: 39,751 digits ***" << endl << endl;
+    // cout << "*** 30th Mersenne prime: 39,751 digits ***" << endl << endl;
 
-    {
-    const Integer<int> n = Integer<int>(2).pow(132049) - 1;
-    cout << "2^132049 - 1 = " << n << endl << endl;
-    }
+    // {
+    // const Integer<int> n = Integer<int>(2).pow(132049) - 1;
+    // cout << "2^132049 - 1 = " << n << endl << endl;
+    // }
 
-    cout << "Done." << endl;
+    // cout << "Done." << endl;
 
     return 0;}
